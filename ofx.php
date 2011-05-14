@@ -8,7 +8,7 @@ namespace Seventymph\OFX;
  **/
 class OFX
 {
-    const $REQUEST = <<<'OFX'
+    const REQUEST = <<<'OFX'
 OFXHEADER:100
 DATA:OFXSGML
 VERSION:102
@@ -92,7 +92,7 @@ OFX;
     }
 
     /**
-     * Fetch transations
+     * Fetch transations.
      *
      * @return array Transactions.
      **/
