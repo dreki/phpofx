@@ -56,7 +56,8 @@ OFX;
     /**
      * Constructor.
      *
-     * @param array $config Valid keys:
+     * @param array $config Valid keys (all required):
+     * -uri string
      * -user_id string
      * -password string
      * -org string
@@ -66,6 +67,7 @@ OFX;
      * @return void
      **/
     public function __construct($config) {
+        $uri = null;
         $user_id = null;
         $password = null;
         $org = null;
@@ -74,12 +76,13 @@ OFX;
         $acct_id = null;
         extract($config);
 
-        if (empty($user_id) || empty($password) || empty($org) || empty($fid)
-            || empty($bank_id) || empty($acct_id))
+        if (empty($uri) ||empty($user_id) || empty($password) || empty($org)
+            || empty($fid) || empty($bank_id) || empty($acct_id))
         {
             throw new Exception("Did not supply all parameters.");
         }
 
+        $this->_uri = $uri;
         $this->_user_id = $user_id;
         $this->_password = $password;
         $this->_org = $org;
@@ -88,9 +91,18 @@ OFX;
         $this->_acct_id = $acct_id;
     }
 
-    private $_user_id;
-    private $_org;
-    private $_fid;
-    private $_bank_id;
-    private $_acct_id;
+    /**
+     * Fetch transations
+     *
+     * @return array Transactions.
+     **/
+    public function fetch() {
+    }
+ 
+    private $_uri = null;
+    private $_user_id = null;
+    private $_org = null;
+    private $_fid = null;
+    private $_bank_id = null;
+    private $_acct_id = null;
 } // END class OFX
