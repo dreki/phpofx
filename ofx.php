@@ -97,6 +97,24 @@ OFX;
      * @return array Transactions.
      **/
     public function fetch() {
+        $request = OFX::REQUEST;
+
+        $tz = strftime("%z", time());
+        $tz = intval($tz);
+        if ($tz >= 0) {
+            $tz = "+$tz";
+        }
+        $now = strftime("%Y%m%d%H%M%S.000[$tz:%Z]", time());
+
+        $request = str_replace('${TIMESTAMP}', $now, $request);
+        $request = str_replace('${USER_ID}', $this->_user_id, $request);
+        $request = str_replace('${PASSWORD}', $this->_password, $request);
+        $request = str_replace('${ORG}', $this->_org, $request);
+        $request = str_replace('${FID}', $this->_fid, $request);
+        $request = str_replace('${BANK_ID}', $this->_bank_id, $request);
+        $request = str_replace('${ACCT_ID}', $this->_acct_id, $request);
+
+        echo $request;
     }
  
     private $_uri = null;
