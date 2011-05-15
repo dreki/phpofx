@@ -129,7 +129,42 @@ OFX;
         $result = curl_exec($curl);
         curl_close($curl);
 
-        echo $result;
+        // Parse transactions.
+        $txns = array();
+
+        $lines = explode("\n", $result);
+        $txn = null;
+        foreach ($lines as $line) {
+            // New transaction.
+            if ($line == "<STMTTRN>") {
+                $txn = new \stdClass();
+            }
+            elseif (strstr($line, "<TRNTYPE>") !== false) {
+                $txn->type = substr($line, 9);
+            }
+            elseif (strstr($line, "<DTPOSTED>") !== false) {
+                $txn->posted_time = strtotime(substr($line, 10));
+            }
+            elseif (strstr($line, "<DTUSER>") !== false) {
+                $txn->user_time = strtotime(substr($line, 8));
+            }
+            elseif (strstr($line, "<TRNAMT>") !== false) {
+                $txn->amount = floatval(substr($line, 8));
+            }
+            elseif (strstr($line, "<NAME>") !== false) {
+                $txn->who = substr($line, 6);
+            }
+            elseif (strstr($line, "<MEMO>") !== false) {
+                $txn->memo = substr($line, 6);
+            }
+            // End of transaction.
+            elseif ($line == "</STMTTRN>") {
+                $txns []= $txn;
+            }
+        }
+
+        // Return.
+        return $txns;
     }
  
     private $_uri = null;
