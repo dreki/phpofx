@@ -114,7 +114,22 @@ OFX;
         $request = str_replace('${BANK_ID}', $this->_bank_id, $request);
         $request = str_replace('${ACCT_ID}', $this->_acct_id, $request);
 
-        echo $request;
+        //echo $request;
+
+        // Perform the HTTP request.
+        $curl = curl_init($this->_uri);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Content-Type: application/x-ofx",
+            "Accept: */*, application/x-ofx",
+        ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        echo $result;
     }
  
     private $_uri = null;
