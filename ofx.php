@@ -138,6 +138,14 @@ OFX;
             // New transaction.
             if ($line == "<STMTTRN>") {
                 $txn = new \stdClass();
+
+                // Init data attributes, so nothing is undefined.
+                $txn->type = null;
+                $txn->posted_time = null;
+                $txn->user_time = null;
+                $txn->amount = null;
+                $txn->who = null;
+                $txn->memo = null;
             }
             elseif (strstr($line, "<TRNTYPE>") !== false) {
                 $txn->type = substr($line, 9);
