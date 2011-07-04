@@ -100,12 +100,7 @@ OFX;
         $request = OFX::REQUEST;
 
         $tz = strftime("%z", time());
-        $tz = intval($tz);
-
-        if (abs($tz) > 100) {
-            $tz = $tz / 100;
-        }
-
+        $tz = intval($tz) / 100;  // Have to hack off the "00" at the end.
         if ($tz >= 0) {
             $tz = "+$tz";
         }
@@ -118,8 +113,6 @@ OFX;
         $request = str_replace('${FID}', $this->_fid, $request);
         $request = str_replace('${BANK_ID}', $this->_bank_id, $request);
         $request = str_replace('${ACCT_ID}', $this->_acct_id, $request);
-
-        // echo $request;
 
         // Perform the HTTP request.
         $curl = curl_init($this->_uri);
