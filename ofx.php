@@ -101,6 +101,11 @@ OFX;
 
         $tz = strftime("%z", time());
         $tz = intval($tz);
+
+        if (abs($tz) > 100) {
+            $tz = $tz / 100;
+        }
+
         if ($tz >= 0) {
             $tz = "+$tz";
         }
@@ -114,7 +119,7 @@ OFX;
         $request = str_replace('${BANK_ID}', $this->_bank_id, $request);
         $request = str_replace('${ACCT_ID}', $this->_acct_id, $request);
 
-        //echo $request;
+        // echo $request;
 
         // Perform the HTTP request.
         $curl = curl_init($this->_uri);
